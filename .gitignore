@@ -278,3 +278,16 @@ pyvenv.cfg
 pip-selfcheck.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm,venv
+
+# Created by https://www.toptal.com/developers/gitignore/api/database
+# Edit at https://www.toptal.com/developers/gitignore?templates=database
+
+### Database ###
+*.accdb
+*.db
+*.dbf
+*.mdb
+*.pdb
+*.sqlite3
+
+# End of https://www.toptal.com/developers/gitignore/api/database

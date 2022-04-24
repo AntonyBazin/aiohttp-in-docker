@@ -1,0 +1,8 @@
+common:
+  port: 8080
+postgres:
+  database: req_db
+  user: requests_user
+  password: requests_password
+  host: localhost
+  port: 5432
