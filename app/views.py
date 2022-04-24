@@ -1,6 +1,10 @@
-from aiohttp.web import json_response
+from aiohttp import web
+import app.db
 
 
 async def handler(request):
-    data = {'some': 'data'}
-    return json_response(data)
+    async with request.app['db'].acquire() as conn:
+        cursor = await conn.execute(app.db.requests.select())
+        records = await cursor.fetchall()
+        req = [dict(q) for q in records]
+        return web.Response(text=str(req))
