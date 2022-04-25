@@ -1,3 +1,6 @@
+from datetime import datetime
+import uuid
+
 from sqlalchemy import create_engine
 
 from app.settings import config
@@ -8,22 +11,20 @@ DSN = 'postgresql://{user}:{password}@{host}:{port}/{database}'
 
 def fill_data(engine):
     conn = engine.connect()
+    engine.execute(requests.delete())
     conn.execute(requests.insert(), [
-        {'id': 0,
-         'request_uuid': '12345',
-         'request_date': 'January 8 04:05:06 1999 MSK',
+        {'request_uuid': uuid.uuid4(),
+         'request_date': datetime(2000, 1, 2, 4, 7, 57).isoformat(),
          'attachment': {'entity': {}}},
     ])
     conn.execute(requests.insert(), [
-        {'id': 1,
-         'request_uuid': '0',
-         'request_date': 'January 8 09:07:01 2001 MSK',
+        {'request_uuid': uuid.uuid4(),
+         'request_date': datetime(2007, 2, 2, 2, 2, 22).isoformat(),
          'attachment': {'entity': {'entity': {}}}},
     ])
     conn.execute(requests.insert(), [
-        {'id': 2,
-         'request_uuid': '1',
-         'request_date': 'May 12 12:11:11 2012 MSK',
+        {'request_uuid': uuid.uuid4(),
+         'request_date': datetime(2022, 6, 20, 13, 0, 3).isoformat(),
          'attachment': {'entity': {}}},
     ])
     conn.close()
