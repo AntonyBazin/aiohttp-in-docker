@@ -39,9 +39,9 @@ def set_params():
                 n = int(arg) if arg.isdigit() else 0
             elif opt in ('-d', '--depth'):
                 d = int(arg) if arg.isdigit() else 0
-            elif opt == 'hide':
+            elif opt == '--hide':
                 hide_output = 1
-        print(f'Set N={n}, depth={d}')
+        print(f'Set N={n}, depth={d}, hide output = {bool(hide_output)}')
     except getopt.error as err:
         print(str(err))
     return n, d, hide_output
