@@ -22,6 +22,5 @@ async def handler(request):
         cursor = await conn.execute(requests.insert().values({'request_uuid': uuidv4,
                                                               'request_date': dtime,
                                                               'attachment': attachment}))
-        inserted_id = await cursor.fetchone()
         data = dict(zip(('request_uuid', 'request_date', 'attachment'), map(str, (uuidv4, dtime, attachment))))
         return web.json_response(data)
