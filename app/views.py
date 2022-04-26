@@ -19,8 +19,8 @@ async def handler(request):
     attachment = get_layers({'entity': ''}, attachment_depth)
 
     async with request.app['db'].acquire() as conn:
-        cursor = await conn.execute(requests.insert().values({'request_uuid': uuidv4,
-                                                              'request_date': dtime,
-                                                              'attachment': attachment}))
+        await conn.execute(requests.insert().values({'request_uuid': uuidv4,
+                                                     'request_date': dtime,
+                                                     'attachment': attachment}))
         data = dict(zip(('request_uuid', 'request_date', 'attachment'), map(str, (uuidv4, dtime, attachment))))
         return web.json_response(data)

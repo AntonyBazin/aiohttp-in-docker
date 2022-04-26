@@ -11,7 +11,7 @@ meta = MetaData()
 requests = Table(
     'requests', meta,
     Column('id', Integer, primary_key=True, autoincrement=True),
-    Column('request_uuid', String(36), nullable=False),
+    Column('request_uuid', String(36), unique=True, nullable=False),
     Column('request_date', DateTime, nullable=False),
     Column('attachment', JSON, nullable=False),
 )
