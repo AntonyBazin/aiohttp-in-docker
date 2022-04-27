@@ -3,7 +3,7 @@ import uuid
 
 from sqlalchemy import create_engine
 
-from app.settings import config
+from settings import config
 from db import requests
 
 DSN = 'postgresql://{user}:{password}@{host}:{port}/{database}'
