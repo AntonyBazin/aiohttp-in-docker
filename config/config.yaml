@@ -4,7 +4,7 @@ postgres:
   database: requeststask
   user: req_user
   password: req_passwd
-  host: localhost
+  host: 172.17.0.2
   port: 5432
   minsize: 1
   maxsize: 5
