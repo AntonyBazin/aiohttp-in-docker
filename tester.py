@@ -23,13 +23,13 @@ requests = Table(
     Column('attachment', JSON, nullable=False),
 )
 
-options = 'hn:d:'
-long_options = ['hide', 'help', 'N=', 'depth=']
+options = 'vhn:d:'
+long_options = ['verbose', 'help', 'N=', 'depth=']
 target_url = 'http://127.0.0.1:8080'
 
 
 def set_params():
-    n, d, hide_output = 0, 0, 0
+    n, d, show_output = 0, 0, 0
     try:
         arguments, values = getopt.getopt(sys.argv[1:], options, long_options)
         for opt, arg in arguments:
@@ -39,12 +39,12 @@ def set_params():
                 n = int(arg) if arg.isdigit() else 0
             elif opt in ('-d', '--depth'):
                 d = int(arg) if arg.isdigit() else 0
-            elif opt == '--hide':
-                hide_output = 1
-        print(f'Set N={n}, depth={d}, hide output = {bool(hide_output)}')
+            elif opt in ('-v', '--verbose'):
+                show_output = 1
+        print(f'Set N={n}, depth={d}, verbose = {bool(show_output)}')
     except getopt.error as err:
         print(str(err))
-    return n, d, hide_output
+    return n, d, show_output
 
 
 def get_config(path):
@@ -53,7 +53,7 @@ def get_config(path):
         return parsed_config
 
 
-async def make_request(url, session, d, engine, hide_output):
+async def make_request(url, session, d, engine, show_output):
     params = {'attachment_depth': d}
     outputs = []
     try:
@@ -63,21 +63,24 @@ async def make_request(url, session, d, engine, hide_output):
                 cursor = await conn.execute(select([requests.c.request_uuid, requests.c.id])
                                             .where(requests.c.request_uuid.like(req_uuid)))
                 res = await cursor.fetchone()
-                if not hide_output:
+                if show_output:
                     print('\n', res)
+                else:
+                    with open('log.txt', 'a') as log:
+                        log.write(str(res))
     except Exception as e:
         print(f'Unable to get {url} due to {e.__class__}: {e.args}.')
     finally:
         return outputs
 
 
-async def make_all_requests(target, n, d, h):
+async def make_all_requests(target, n, d, v):
     ret = []
     config = get_config(pathlib.Path(__file__).parent)
     async with aiohttp.ClientSession() as session:
         async with create_engine(**config['postgres']) as engine:
             for f in tqdm.tqdm(asyncio.as_completed(
-                    [make_request(target, session, d, engine, h) for _ in range(n)]),
+                    [make_request(target, session, d, engine, v) for _ in range(n)]),
                     total=n):
                 ret.append(await f)
     print(f'Finalized all. Got a list of {len(ret)} outputs.')
@@ -85,5 +88,7 @@ async def make_all_requests(target, n, d, h):
 
 
 if __name__ == '__main__':
-    number, depth, hide = set_params()
-    asyncio.run(make_all_requests(target_url, number, depth, hide))
+    number, depth, verbose = set_params()
+    prev_log = open('log.txt', 'w')
+    prev_log.close()
+    asyncio.run(make_all_requests(target_url, number, depth, verbose))

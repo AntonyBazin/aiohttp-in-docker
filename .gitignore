@@ -291,3 +291,5 @@ pip-selfcheck.json
 *.sqlite3
 
 # End of https://www.toptal.com/developers/gitignore/api/database
+
+log.txt
