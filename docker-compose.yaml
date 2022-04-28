@@ -2,11 +2,11 @@ services:
   db:
     build: './db-init'
     ports:
-      - '5432:15432'
+      - '15432:5432'
   web:
     depends_on:
       - db
     build: './'
     ports:
-      - '8080:18080'
+      - '18080:8080'
 
