@@ -13,6 +13,5 @@ def create_tables(engine):
 
 if __name__ == '__main__':
     db_url = DSN.format(**config['postgres'])
-    print(db_url)
     engine = create_engine(db_url)
     create_tables(engine)
