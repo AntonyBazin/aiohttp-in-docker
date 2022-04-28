@@ -1,4 +1,4 @@
 
 python init_db.py
-python app/mosk.py
+python app/mock.py
 python runner.py
